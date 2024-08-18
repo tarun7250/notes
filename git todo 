@@ -1,0 +1,9 @@
+main c1 -> c7
+kushal c1 -> c2(new file) -> c3(edit file) -> c4(edit file) -> rebase
+adarsh c2() -> c5(edit another file ) -> c6(edit another file)
+
+-
+
+kushal c1<- c7 <- c2'(new file) <- c3'(edit file) <- c4'(edit file)
+
+git rebase --onto kushal adarsh
