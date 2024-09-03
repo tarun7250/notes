@@ -559,6 +559,9 @@ type Type = {
 ### Readonly<Type>
 - just applies readonly at front of each property 
 - leaves direct
+- **readonly array/tuples cannot be reassigned to normal array/tuple but opposite possible so can be changed**
+- but object can be assigned in both directions
+
 
 ### Record<KeyType,ValueType>
 - 'Keys' must satisfy the constraint 'string | number | symbol'
@@ -581,4 +584,85 @@ type Type = {
 - removes the Keys from the keys of Type and keep the rest 
 
 
+## Mapped types (in as)
+- 
 
+## template literal
+- using \`${}\` can types can be declared
+```ts
+type EmailLocaleIDs = "welcome_email" | "email_heading";
+type FooterLocaleIDs = "footer_title" | "footer_sendoff";
+ 
+type AllLocaleIDs = `${EmailLocaleIDs | FooterLocaleIDs}_id`;
+
+//type AllLocaleIDs = "welcome_email_id" | "email_heading_id" | "footer_title_id" | "footer_sendoff_id"
+```
+
+
+## Type Compatibility
+- x is compatible with y if y has at least the same members as x
+- same thing also happens in  calling of a function
+- type exact same
+```ts
+interface Pet {
+  name: string;
+}
+let pet: Pet;
+// dog's inferred type is { name: string; owner: string; }
+let dog = { name: "Lassie", owner: "Rudd Weatherwax" };
+pet = dog;
+
+let dog: Pet = { name: "Lassie", owner: "Rudd Weatherwax" }; // Error
+```
+
+### case of functions
+```ts
+arr.forEach((item,index,array)=>{})
+arr.forEach((item)=>{}) //not forcing to write more
+```
+- less parameters are ok but not more
+- x is assignable to y then all parameters in x should be compatible with some parameter in y
+- strictFunctiontType compatibility checks compatibility of arguments strictly type should match exactly except for never and any cases
+```ts
+type x = ((s: true)=>void) extends ((s:boolean)=>void) ? true: false;
+```
+- return value similar to normal variables
+
+
+## class
+- When comparing two objects of a class type, only members of the instance are compared. Static members and constructors do not affect compatibility.
+
+## generics
+- empty matches every empty but not nonempty
+
+## enums TODO
+- enums of different types are incompatible
+- 
+
+
+## modules
+- JavaScript files without an import declaration, export, or top-level await should be considered a script and not a module.
+- adding `export {}` - makes it module
+```ts
+import { createCatName, type Cat, type Dog } from "./animal.js";
+
+export type Cat = { breed: string; yearOfBirth: number };
+export type Dog = { breeds: string[]; yearOfBirth: number };
+export const createCatName = () => "fluffy";
+
+import type { Cat, Dog } from "./animal.js";
+export type Animals = Cat | Dog;
+```
+
+## type inference
+- if multiple types involved in type inference then minimal best is taken 
+```ts
+let zoo = [new Rhino(), new Elephant(), new Snake()]; 
+// let zoo: (Rhino | Elephant | Snake)[]
+// if want to make animal then explicitly type
+let zoo: Animal[] = [new Rhino(), new Elephant(), new Snake()]; 
+```
+
+### any non null /undefined/void can be assigned to {} (empty object interface)
+
+- keyof union_of_types  - give only common keys else never
