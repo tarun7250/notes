@@ -1017,8 +1017,26 @@ function counter(maxCount){
                 break;
             }
         }
+        if(i>=maxCount){
+          return;
+        }
         setTimeout(internalCounter,0);
     }
     internalCounter();
 }
 ```
+- debounce function run after sometime the even has finished
+- throttle gap between two function run is defined
+
+#### console.time
+```js
+console.time('filter array');
+const visibleTodos = filterTodos(todos, tab);
+console.timeEnd('filter array');
+```
+
+### tree shaking
+-  The process of eliminating dead code before adding it to our bundle, is called tree-shaking.
+# event loop
+## requestAnimationFrame(callback);
+## requestIdleCallback(callback);
